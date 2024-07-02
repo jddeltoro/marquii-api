@@ -1,0 +1,29 @@
+# Dependency directories
+node_modules/
+
+# dotenv environment variables file
+.env
+
+# Log files
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.log
+
+# Compiled binary addons (http://nodejs.org/api/addons.html)
+build/Release
+
+# Dependency directories
+node_modules/
+
+# Typescript v1 declaration files
+typings/
+
+# Optional npm cache directory
+.npm
+
+# dotenv environment variables file
+.env
