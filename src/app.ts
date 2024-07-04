@@ -1,35 +1,35 @@
 import express from 'express';
-import mongoose from 'mongoose';
 import ProductRouter from './routes/product.routes';
 import { initializeListeners } from './listeners/index.listeners';
+import prisma from './prisma';
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
-const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/myapp';
+async function startServer() {
+    try {
+        await prisma.$connect();
+        console.log('Database connected successfully');
 
-const connectWithRetry = () => {
-        mongoose.connect(mongoUri)
-        .then(() => {
-            console.log('MongoDB connected successfully');
-            initializeListeners();
-        })
-        .catch((err) => {
-            console.error('MongoDB connection error:', err);
-            console.log('Retrying in 5 seconds...');
-            setTimeout(connectWithRetry, 5000);
+        // Initialize all listeners
+        initializeListeners();
+
+        // Routes
+        app.use('/products', ProductRouter);
+
+        // Start server
+        app.listen(port, () => {
+            console.log(`Server running at http://localhost:${port}`);
         });
-};
+    } catch (error: any) {
+        console.error('Unable to connect to the database:', error);
+        process.exit(1);
+    }
+}
 
-connectWithRetry();
+startServer();
 
-// Routes
-app.use('/products', ProductRouter);
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
 
 export default app;
