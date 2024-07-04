@@ -1,21 +1,21 @@
 import { productEvents } from "../events/product.events";
-import { IProduct } from "../models/product.model"; 
+import { Product } from '@prisma/client';
 
 export function initializeProductListeners() {
-    productEvents.on('productCreated',  handleProductCreated);
-    productEvents.on('productUpdated',  handleProductUpdated);
-    productEvents.on('productDeleted',  handleProductDeleted);
+	productEvents.on('productCreated', handleProductCreated);
+	productEvents.on('productUpdated', handleProductUpdated);
+	productEvents.on('productDeleted', handleProductDeleted);
 }
 
-function handleProductCreated(product: IProduct) {
-    console.log(`Product created: ${product.name}`);
+function handleProductCreated(product: Product) {
+	console.log(`Product created: ${product.name}`);
 }
 
-function handleProductUpdated(product: IProduct) {
-    console.log(`Product updated: ${product.name}`);
+function handleProductUpdated(product: Product) {
+	console.log(`Product updated: ${product.name}`);
 }
 
-function handleProductDeleted(product: IProduct) {
-    console.log(`Product deleted: ${product.name}`);
+function handleProductDeleted(productId: String) {
+	console.log(`Product deleted: ${productId}`);
 }
 
