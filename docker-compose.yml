@@ -5,15 +5,20 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - mongo
+      - postgres
     environment:
-      - MONGO_URI=mongodb://mongo:27017/myapp
-  mongo:
-    image: mongo:latest
+      - DATABASE_URL=postgres://user:password@postgres:5432/myapp?schema=public
+      - PORT=3000
+  postgres:
+    image: postgres:13
     ports:
-      - "27017:27017"
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: myapp
     volumes:
-      - mongodb_data:/data/db
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
-  mongodb_data:
+  postgres_data:
