@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Product" ADD COLUMN     "dateOfExpiry" TIMESTAMP(3) NOT NULL DEFAULT '2026-12-31 23:59:59 +00:00';
