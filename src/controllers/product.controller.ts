@@ -1,9 +1,12 @@
 import { Request, Response } from 'express';
 import prisma from '../prisma';
 import { productEvents } from '../events/product.events';
+import { extractErrorMessage } from '../utils/utils';
+import { Prisma } from '@prisma/client';
 
 class ProductController {
 	async create(req: Request, res: Response) {
+		console.log('Test2');
 		try {
 			const product = await prisma.product.create({
 				data: req.body,
@@ -11,7 +14,12 @@ class ProductController {
 			productEvents.emit('productCreated', product);
 			res.status(201).json(product);
 		} catch (error: any) {
-			res.status(400).json({ message: error.message });
+			if (error instanceof Prisma.PrismaClientValidationError) {
+				const errorMessage = extractErrorMessage(error.message);
+				res.status(400).json({ message: errorMessage });
+			} else {
+				res.status(500).json({ message: 'An unexpected error occurred' });
+			}
 		}
 	}
 
